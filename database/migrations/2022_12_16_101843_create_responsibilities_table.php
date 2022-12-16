@@ -15,6 +15,12 @@ return new class extends Migration
     {
         Schema::create('responsibilities', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+
+            // foreign key
+            $table->bigInteger('role_id')->unsigned(); // unsigned? tidak terdapat - dan +
+
+            $table->softDeletes(); // kalau menghapus data supaya tidak benar" hilang dari DB
             $table->timestamps();
         });
     }

@@ -15,6 +15,13 @@ return new class extends Migration
     {
         Schema::create('teams', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('icon');
+
+            // foreign key
+            $table->bigInteger('company_id')->unsigned(); // unsigned? tidak terdapat - dan +
+
+            $table->softDeletes(); // kalau menghapus data supaya tidak benar" hilang dari DB
             $table->timestamps();
         });
     }

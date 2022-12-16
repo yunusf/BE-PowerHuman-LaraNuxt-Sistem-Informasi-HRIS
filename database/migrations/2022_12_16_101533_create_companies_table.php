@@ -15,6 +15,10 @@ return new class extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('logo')->nullable(); // nullable()-> tidak wajib di isi user
+
+            $table->softDeletes(); // kalau menghapus data supaya tidak benar" hilang dari DB
             $table->timestamps();
         });
     }
