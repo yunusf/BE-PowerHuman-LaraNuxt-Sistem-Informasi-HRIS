@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Company;
+use App\Models\Role;
 use App\Models\Team;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -29,6 +30,9 @@ class DatabaseSeeder extends Seeder
         // Company::factory(10)->create();
 
         // membuat data faker untuk team
-        Team::factory(30)->create();
+        // Team::factory(30)->create();
+
+        // membuat data faker untuk role
+        Role::factory(50)->create();
     }
 }
