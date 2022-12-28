@@ -18,10 +18,10 @@ class ResponsibilityFactory extends Factory
     {
         return [
             // membuat data faker
-            'name' => $this->faker->sentence(),
+            'name' => $this->faker->bs(), // bs() => bisa dibilang jobdesk
 
             // menghubungkan relasi role
-            'role_id' => $this->faker->numberBetween(1, 10),
+            'role_id' => $this->faker->numberBetween(1, 50),
         ];
     }
 }
