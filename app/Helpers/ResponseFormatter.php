@@ -2,7 +2,6 @@
 
 namespace App\Helpers;
 
-// template format for API, template tambahan
 /**
  * Format response.
  */

@@ -40,7 +40,7 @@ class DatabaseSeeder extends Seeder
         // membuat data faker untuk responsibility
         // Responsibility::factory(200)->create();
 
-        // membuat data faker untuk responsibility
-        Employee::factory(970)->create();
+        // membuat data faker untuk employee
+        // Employee::factory(970)->create();
     }
 }
