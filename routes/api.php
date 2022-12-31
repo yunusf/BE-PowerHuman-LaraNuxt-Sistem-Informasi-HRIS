@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CompanyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -15,9 +16,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/*
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+*/
 
+// Company
 // memanggil controller companies api
 Route::get('/company', [CompanyController::class, 'all']);
+
+// AUTH|USER
+Route::post('login', [AuthController::class, 'login']); // kirim data => membuat token
+Route::post('register', [AuthController::class, 'register']); // kirim data => membuat token
+Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum'); // kirim data => hapus token
+Route::get('user', [AuthController::class, 'fetch'])->middleware('auth:sanctum'); // get user data using token login/regis
