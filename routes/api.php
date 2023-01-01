@@ -23,8 +23,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 */
 
 // Company
-// memanggil controller companies api
-Route::get('/company', [CompanyController::class, 'all']);
+Route::get('company', [CompanyController::class, 'all']); // memanggil controller companies api
+Route::post('company', [CompanyController::class, 'create'])->middleware('auth:sanctum');
 
 // AUTH|USER
 Route::post('login', [AuthController::class, 'login']); // kirim data => membuat token
