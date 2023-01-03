@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateCompanyRequest;
+use App\Http\Requests\UpdateCompanyRequest;
 use App\Models\Company;
 use App\Models\User;
 use Exception;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
 class CompanyController extends Controller
 {
     //
-    public function all(Request $request)
+    public function fetch(Request $request)
     {
         $id = $request->input('id');
         $name = $request->input('name');
@@ -22,7 +23,9 @@ class CompanyController extends Controller
 
         // ex: powerhuman.com/api/company?id=1 | untuk data satuan seperti di bawah ini
         if ($id) {
-            $company = Company::with(['users'])->find($id);
+            $company = Company::wherehas('users', function ($query) {
+                $query->where('user_id', Auth::id());
+            })->with(['users'])->find($id);
 
             if ($company) {
                 return ResponseFormatter::success($company, 'Company Found');
@@ -33,7 +36,10 @@ class CompanyController extends Controller
 
         // ex: powerhuman.com/api/company | mengambil list company
         // mengambil model companies dengan relasi user (menampilkan data companies dengan user di dlmnya ada siapa aja)
-        $companies = Company::with(['users']);
+        // $companies = Company::with(['users']);
+        $companies = Company::with(['users'])->wherehas('users', function ($query) {
+            $query->where('user_id', Auth::id());
+        });
 
         // membuat filtering data
         if ($name) {
@@ -74,6 +80,34 @@ class CompanyController extends Controller
             $company->load('users');
 
             return ResponseFormatter::success($company, 'Company Created');
+        } catch (Exception $e) {
+            return ResponseFormatter::error($e->getMessage(), 500);
+        }
+    }
+
+    public function update(UpdateCompanyRequest $request, $id)
+    {
+        try {
+            // get company
+            $company = Company::find($id);
+
+            // if company not found
+            if (!$company) {
+                throw new Exception('Company Not Found!');
+            }
+
+            //upload logo
+            if ($request->hasFile('logo')) {
+                $path = $request->file('logo')->store('public/logos');
+            }
+
+            // Update Company
+            $company = Company::updated([
+                'name' => $request->name,
+                'logo' => $path,
+            ]);
+
+            return ResponseFormatter::success($company, 'Company Update');
         } catch (Exception $e) {
             return ResponseFormatter::error($e->getMessage(), 500);
         }
