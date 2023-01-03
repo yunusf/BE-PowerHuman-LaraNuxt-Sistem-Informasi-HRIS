@@ -22,9 +22,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 */
 
-// Company
-Route::get('company', [CompanyController::class, 'all']); // memanggil controller companies api
-Route::post('company', [CompanyController::class, 'create'])->middleware('auth:sanctum');
+// Company API
+Route::prefix('company')->middleware('auth:sanctum')->name('company.')->group(function () {
+    Route::get('', [CompanyController::class, 'fetch'])->name('fetch'); // memanggil controller companies api
+    Route::post('', [CompanyController::class, 'create'])->name('create'); // api.com/company
+    Route::post('update/{id}', [CompanyController::class, 'update'])->name('update'); // api.com/company
+});
+
 
 // AUTH|USER
 Route::post('login', [AuthController::class, 'login']); // kirim data => membuat token

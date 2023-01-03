@@ -21,11 +21,14 @@ class CompanyController extends Controller
         $name = $request->input('name');
         $limit = $request->input('limit', 10);
 
+        $companyQuery = Company::with(['users'])->wherehas('users', function ($query) {
+            $query->where('user_id', Auth::id());
+        });
+
         // ex: powerhuman.com/api/company?id=1 | untuk data satuan seperti di bawah ini
+        // get singgle data
         if ($id) {
-            $company = Company::wherehas('users', function ($query) {
-                $query->where('user_id', Auth::id());
-            })->with(['users'])->find($id);
+            $company = $companyQuery->find($id);
 
             if ($company) {
                 return ResponseFormatter::success($company, 'Company Found');
@@ -37,9 +40,8 @@ class CompanyController extends Controller
         // ex: powerhuman.com/api/company | mengambil list company
         // mengambil model companies dengan relasi user (menampilkan data companies dengan user di dlmnya ada siapa aja)
         // $companies = Company::with(['users']);
-        $companies = Company::with(['users'])->wherehas('users', function ($query) {
-            $query->where('user_id', Auth::id());
-        });
+        // get multiple data
+        $companies = $companyQuery;
 
         // membuat filtering data
         if ($name) {
