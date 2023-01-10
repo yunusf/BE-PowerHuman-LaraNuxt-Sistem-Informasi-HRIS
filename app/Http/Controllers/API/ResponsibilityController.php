@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API;
 use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateResponsibilityRequest;
-use App\Http\Requests\UpdateResponsibilityRequest;
 use App\Models\Responsibility;
 use Exception;
 use Illuminate\Http\Request;
@@ -58,36 +57,18 @@ class ResponsibilityController extends Controller
                 'role_id' => $request->role_id,
             ]);
 
-            return ResponseFormatter::success($responsibility, 'Responsibility Found');
+            if (!$responsibility) {
+                # code...
+                throw new Exception('Responsibility Not Created');
+            }
+
+            return ResponseFormatter::success($responsibility, 'Responsibility Created');
         } catch (Exception $e) {
             //throw $th;
             return ResponseFormatter::error($e->getMessage(), 500);
         }
     }
 
-    // public function update(UpdateResponsibilityRequest $request, $id)
-    // {
-    //     # code...
-    //     try {
-    //         //code...
-    //         $responsibility = Responsibility::find($id);
-
-    //         if (!$responsibility) {
-    //             # code...
-    //             throw new Exception('Responsibility Not Found!');
-    //         }
-
-    //         $responsibility->update([
-    //             'name' => $request->name,
-    //             'role' => $request->role,
-    //         ]);
-
-    //         return ResponseFormatter::success($responsibility, 'Responsibility Update');
-    //     } catch (Exception $e) {
-    //         //throw $th;
-    //         return ResponseFormatter::error($e->getMessage(), 500);
-    //     }
-    // }
 
     public function destroy($id)
     {
